@@ -9,6 +9,7 @@ import Home from "./components/home.component";
 import Login from "./components/login.component";
 import Profile from "./components/profile.component";
 import Register from "./components/register.component";
+import Session from "./components/session.component";
 import AuthService from "./services/auth.service";
 
 class App extends Component {
@@ -57,8 +58,8 @@ class App extends Component {
 
             {showModeratorBoard && (
               <li className="nav-item">
-                <Link to={"/mod"} className="nav-link">
-                  Moderator Board
+                <Link to={"/session"} className="nav-link">
+                  Session
                 </Link>
               </li>
             )}
@@ -119,6 +120,7 @@ class App extends Component {
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
+            <Route path="/session" component={Session} />
           </Switch>
         </div>
       </div>

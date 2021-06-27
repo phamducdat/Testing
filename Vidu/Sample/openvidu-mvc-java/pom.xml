@@ -52,6 +52,7 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
+
 		<dependency>
 			<groupId>io.openvidu</groupId>
 			<artifactId>openvidu-java-client</artifactId>

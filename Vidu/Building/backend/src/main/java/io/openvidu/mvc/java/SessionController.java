@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import io.openvidu.java.client.Session;
 @Controller
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class SessionController {
+	// docker run -p 4443:4443 --rm -e OPENVIDU_SECRET=MY_SECRET openvidu/openvidu-server-kms:2.17.0
 
 	// OpenVidu object as entrypoint of the SDK
 	private OpenVidu openVidu;
@@ -43,80 +45,62 @@ public class SessionController {
 	}
 
 	@RequestMapping(value = "/session", method = RequestMethod.POST)
-	public String joinSession(@Valid @RequestBody SessionInput sessionInput,
-							  Model model, HttpSession httpSession) {
+	public ResponseEntity<?> joinSession(@Valid @RequestBody SessionInput sessionInput) {
 
+//		ModelDAO modelDAO = new ModelDAO("24", "wss://localhost:4443?sessionId=ses_TKrgSWOrjI&token=tok_ReBSJWvuXzqZNXXO",
+//				"2", "publisher1");
+//		return ResponseEntity.ok(modelDAO);
 		System.out.println("Get in joinSession");
-		System.out.println("Id of httpSession = " + httpSession.getId());
+//		System.out.println("Id of httpSession = " + httpSession.getId());
 		String clientData = sessionInput.getData();
 		String sessionName = sessionInput.getSessionName();
 		System.out.println("clientData = " + clientData);
 		System.out.println("sessionName = " + sessionName);
-		try {
-			checkUserLogged(httpSession);
-		} catch (Exception e) {
-			return "index";
-		}
+
 		System.out.println("Getting sessionId and token | {sessionName}=" +
 				"{" + sessionName + "}");
 
 
-		OpenViduRole role =
-				LoginController.users.get(httpSession.getAttribute("loggedUser")).role;
+		String attribute = "publisher1";
+
+		OpenViduRole role = LoginController.users.get(attribute).role;
 
 		String serverData = "{\"serverData\": \"" +
-				httpSession.getAttribute("loggedUser") + "\"}";
-
-		// Build connectionProperties object with the serverData and the role
+				attribute + "\"}";
 		ConnectionProperties connectionProperties = new ConnectionProperties
 				.Builder().type(ConnectionType.WEBRTC)
 				.role(role).data(serverData).build();
 
 		if (this.mapSessions.get(sessionName) != null) {
-			// Session already exists
 			System.out.println("Existing session " + sessionName);
 			try {
-
-				// Generate a new token with the recently created connectionProperties
 				String token = this.mapSessions.get(sessionName).createConnection(connectionProperties)
 						.getToken();
-
-
 				this.mapSessionNamesTokens.get(sessionName).put(token, role);
+				System.out.println("token = " + token);
+				ModelDAO modelDAO = new ModelDAO(sessionName, token, clientData, attribute);
 
-				model.addAttribute("sessionName", sessionName);
-				model.addAttribute("token", token);
-				model.addAttribute("nickName", clientData);
-				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
-				System.out.println("this.mapSessions.get(sessionName) != null " + model.toString());
-
-				return "session";
-
+				System.out.println("this.mapSessions.get(sessionName) != null " + modelDAO.toString());
+				return ResponseEntity.ok(modelDAO);
 			} catch (Exception e) {
-				return "dashboard";
+				return ResponseEntity.ok("Failed in join session");
 			}
 		} else {
-
 			System.out.println("New session " + sessionName);
 			try {
-
 				Session session = this.openVidu.createSession();
 				String token = session.createConnection(connectionProperties).getToken();
-
 
 				this.mapSessions.put(sessionName, session);
 				this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
 				this.mapSessionNamesTokens.get(sessionName).put(token, role);
-
-				model.addAttribute("sessionName", sessionName);
-				model.addAttribute("token", token);
-				model.addAttribute("nickName", clientData);
-				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
-				System.out.println("this.mapSessions.get(sessionName) == null " + model.toString());
-				return "session";
+				System.out.println("token = " + token);
+				ModelDAO modelDAO = new ModelDAO(sessionName, token, clientData, attribute);
+				System.out.println("this.mapSessions.get(sessionName) == null " + modelDAO.toString());
+				return ResponseEntity.ok(modelDAO);
 
 			} catch (Exception e) {
-				return "dashboard";
+				return ResponseEntity.ok("Failed in create new session");
 			}
 		}
 	}

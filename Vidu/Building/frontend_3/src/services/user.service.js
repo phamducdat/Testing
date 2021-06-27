@@ -12,11 +12,18 @@ class UserService {
     return axios.get(API_URL + "admin", { headers: authHeader() });
   }
   getModeratorBoard() {
-    return axios.post(API_URL + "session", { data: "2", sessionName: "24" });
+    return axios.get(API_URL + "admin", { headers: authHeader() });
   }
 
   getAdminBoard() {
     return axios.get(API_URL + "admin", { headers: authHeader() });
+  }
+
+  getSession(data, sessionName) {
+    return axios.post(API_URL + "session", {
+      data: data,
+      sessionName: sessionName,
+    });
   }
 }
 
