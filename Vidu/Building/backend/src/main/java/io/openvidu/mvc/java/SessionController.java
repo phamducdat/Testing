@@ -22,6 +22,7 @@ import io.openvidu.java.client.Session;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class SessionController {
 	// docker run -p 4443:4443 --rm -e OPENVIDU_SECRET=MY_SECRET openvidu/openvidu-server-kms:2.17.0
+	// docker run -d -p 80:80 docker/getting-started
 
 	// OpenVidu object as entrypoint of the SDK
 	private OpenVidu openVidu;
@@ -74,8 +75,10 @@ public class SessionController {
 		if (this.mapSessions.get(sessionName) != null) {
 			System.out.println("Existing session " + sessionName);
 			try {
+				System.out.println("get in try");
 				String token = this.mapSessions.get(sessionName).createConnection(connectionProperties)
 						.getToken();
+				System.out.println("get out + " + token);
 				this.mapSessionNamesTokens.get(sessionName).put(token, role);
 				System.out.println("token = " + token);
 				ModelDAO modelDAO = new ModelDAO(sessionName, token, clientData, attribute);
@@ -83,6 +86,7 @@ public class SessionController {
 				System.out.println("this.mapSessions.get(sessionName) != null " + modelDAO.toString());
 				return ResponseEntity.ok(modelDAO);
 			} catch (Exception e) {
+				e.printStackTrace();
 				return ResponseEntity.ok("Failed in join session");
 			}
 		} else {
