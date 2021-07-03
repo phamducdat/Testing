@@ -2,6 +2,7 @@ package com.infybuzz.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,11 @@ public class EmailController {
 	@GetMapping("/sendEmailwithAttachment")
 	public String sendEmailwithAttachment() {
 		return emailService.sendEmailwithAttachment();
+	}
+
+	@PostMapping("/sendEmailWithTemplate")
+	public String sendEmailWithTemplate() {
+		return emailService.sendEmailWithTemplate();
 	}
 	
 }
