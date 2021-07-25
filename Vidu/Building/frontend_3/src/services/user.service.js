@@ -19,9 +19,18 @@ class UserService {
     return axios.get(API_URL + "admin", { headers: authHeader() });
   }
 
-  getSession(data, sessionName) {
-    return axios.post(API_URL + "session", {
-      data: data,
+  // getSession(data, sessionName) {
+  //   console.log("data = " + data, "session = " + sessionName);
+  //   return axios.post(API_URL + "session", {
+  //     data: data,
+  //     sessionName: sessionName,
+  //   });
+  // }
+
+  getSession(sessionName) {
+    console.log("session = " + sessionName);
+    return axios.post(API_URL + "get-token", {
+      // data: data,
       sessionName: sessionName,
     });
   }
