@@ -13,3 +13,5 @@ Kiểm tra trên frontend thì thấy tại dòng 145-148 không setState nên k
 Source backend: mvc-java và Javascript-java
 Source frontend: insecure-react
 Link hỏi đáp vidu: OpenVidu - openvidu webrtc videoconference web apps mobile ipcamera realtime
+
+Phiên bản sử dụng: 2.17.0
