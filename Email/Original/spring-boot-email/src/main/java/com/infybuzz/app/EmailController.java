@@ -15,11 +15,14 @@ public class EmailController {
 
 	@GetMapping("/sendEmail")
 	public String sendEmail() {
+
+		System.out.println("Test for email");
 		return emailService.sendEmail();
 	}
 	
 	@GetMapping("/sendEmailwithAttachment")
 	public String sendEmailwithAttachment() {
+
 		return emailService.sendEmailwithAttachment();
 	}
 

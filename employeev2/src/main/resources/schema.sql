@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS EMPLOYEE;
+
+create table EMPLOYEE(
+	EMPLOYEE_ID VARCHAR(45) primary key,
+	FIRST_NAME VARCHAR(45) not null,
+ 	LAST_NAME VARCHAR(45) not null,
+ 	EMAIL VARCHAR(45) not null
+)

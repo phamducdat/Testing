@@ -36,7 +36,7 @@ public class EmailService {
 
 	public String sendEmail() {
 		SimpleMailMessage message = new SimpleMailMessage();
-		
+
 		message.setFrom("phamducdat2402@gmail.com");
 		message.setTo("phamducdat2402@gmail.com");
 		message.setSubject("Test Subject");

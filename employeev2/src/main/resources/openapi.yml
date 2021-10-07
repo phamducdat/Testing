@@ -1,0 +1,188 @@
+swagger: '2.0'
+info:
+  description: The document of Department REST APIs
+  version: 1.0.0
+  title: Department REST APIs
+  contact:
+    name: Dat Pham
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:8080'
+basePath: /departments/backend/v1
+
+paths:
+
+  /employees:
+
+    get:
+      tags:
+        - Employees
+      summary: Get All Employees
+      operationId: getAllEmployees
+      produces:
+        - application/json
+      responses:
+        200:
+          $ref: '#/responses/EmployeeList'
+        401:
+          $ref: '#/responses/NoAuthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/NotFound'
+    post:
+      tags:
+        - Employees
+      summary: Add Employee
+      operationId: addEmployee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: employeeRequest
+          description: request
+          schema:
+            $ref: '#/definitions/EmployeeReq'
+      responses:
+        200:
+          $ref: '#/responses/EmployeeRes'
+        401:
+          $ref: '#/responses/NoAuthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/NotFound'
+
+  /employees/{employeeId}:
+    parameters:
+      - name: employeeId
+        in: path
+        description: employeeId
+        required: true
+        type: string
+        format: int64
+    get:
+      tags:
+        - Employees
+      summary: get Employee
+      operationId: getEmployeeById
+      produces:
+        - application/json
+      responses:
+        200:
+          $ref: '#/responses/EmployeeRes'
+        401:
+          $ref: '#/responses/NoAuthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/NotFound'
+    put:
+      tags:
+        - Employees
+      summary: update Employee
+      operationId: updateEmployee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: employeeRequest
+          description: request
+          schema:
+            $ref: '#/definitions/EmployeeReq'
+      responses:
+        200:
+          $ref: '#/responses/EmployeeRes'
+        401:
+          $ref: '#/responses/NoAuthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/NotFound'
+    delete:
+      tags:
+        - Employees
+      summary: Delete Employee By Id
+      operationId: deleteEmployeeId
+      consumes: []
+      responses:
+        200:
+          $ref: '#/responses/OK'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/NoAuthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/NotFound'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+
+
+definitions:
+  EmployeeRes:
+    type: object
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      employeeId:
+        type: string
+        format: int64
+
+  EmployeeList:
+    type: array
+    items:
+      $ref: '#/definitions/EmployeeRes'
+
+
+  EmployeeReq:
+    type: object
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+    title: EmployeeReq
+
+
+
+responses:
+  EmployeeRes:
+    description: 'Employee Response'
+    schema:
+      $ref: '#/definitions/EmployeeRes'
+  EmployeeList:
+    description: 'Employees Response'
+    schema:
+      $ref: '#/definitions/EmployeeList'
+  OK:
+    description: '200: OK'
+  Created:
+    description: '201: Created'
+  Accepted:
+    description: '202: Accepted'
+  NoContent:
+    description: '204: NoContent'
+  BadRequest:
+    description: '400: Bad Request'
+  NoAuthorized:
+    description: '401: No Authorized'
+  Forbidden:
+    description: '403: Forbidden'
+  NotFound:
+    description: '404: Not Found'
+  InternalServerError:
+    description: '500: Internal Server Error'
