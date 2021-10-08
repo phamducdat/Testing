@@ -23,7 +23,7 @@ paths:
         - application/json
       responses:
         200:
-          $ref: '#/responses/Author'
+          $ref: '#/responses/AuthorList'
         401:
           $ref: '#/responses/NoAuthorized'
         403:
@@ -36,7 +36,7 @@ paths:
       summary: Create New Author
       operationId: createAuthor
       consumes:
-        - applicaiton/json
+        - application/json
       produces:
         - application/json
       parameters:
@@ -59,7 +59,7 @@ paths:
     parameters:
       - name: authorId
         in: path
-        description: The Id Of Author To Get
+        description: The Id Of Author
         required: true
         type: string
     get:
@@ -78,31 +78,24 @@ paths:
           $ref: '#/responses/Forbidden'
         404:
           $ref: '#/responses/NotFound'
-  /authors/{authorId}/blogs/{blogId}:
+
+  /authors/{authorId}/blogs:
     parameters:
       - name: authorId
         in: path
-        description: The authorId
+        description: The Id Of Author
         required: true
         type: string
-        format: int64
-
-      - name: blogId
-        in: path
-        description: BlogId
-        required: true
-        type: string
-        format: string
     get:
       tags:
         - Blogs
-      summary: Get Blog Which Created By AuthorId
-      operationId: getBlogByAuthorId
+      summary: Get All Blog Of Author
+      operationId: getAllBlogByAuthor
       produces:
         - application/json
       responses:
         200:
-          $ref: '#/responses/Blog'
+          $ref: '#/responses/BlogList'
         401:
           $ref: '#/responses/NoAuthorized'
         403:
@@ -110,19 +103,13 @@ paths:
         404:
           $ref: '#/responses/NotFound'
 
-  /authors/{authorId}/blogs/:
-    parameters:
-      - name: authorId
-        in: path
-        description: The authorId
-        required: true
-        type: string
-        format: int64
+
+  /blogs:
     get:
       tags:
         - Blogs
-      summary: Get All Blog Which Created By AuthorId
-      operationId: getAllBlogByAuthorId
+      summary: Get All Blog
+      operationId: getAllBlog
       produces:
         - application/json
       responses:
@@ -137,39 +124,22 @@ paths:
     post:
       tags:
         - Blogs
-      summary: Created The Blog By The AuthorId
-      operationId: createBlogByAuthorId
+      summary: Create The New Blog
+      operationId: CreateBlog
       consumes:
         - application/json
       produces:
         - application/json
+
       parameters:
         - in: body
-          name: BlogRequestByAuthorId
+          name: blogRequest
           required: true
           schema:
             $ref: "#/definitions/BlogRequest"
       responses:
         200:
           $ref: '#/responses/Blog'
-        401:
-          $ref: '#/responses/NoAuthorized'
-        403:
-          $ref: '#/responses/Forbidden'
-        404:
-          $ref: '#/responses/NotFound'
-
-  /blogs:
-    get:
-      tags:
-        - Blogs
-      summary: Get All Blog
-      operationId: getAllBlog
-      produces:
-        - applicaiton/json
-      responses:
-        200:
-          $ref: '#/responses/BlogList'
         401:
           $ref: '#/responses/NoAuthorized'
         403:
@@ -202,14 +172,7 @@ paths:
           $ref: '#/responses/NotFound'
 
 
-  /authors/{authorId}/contacts:
-    parameters:
-      - name: authorId
-        in: path
-        description: The authorId
-        required: true
-        type: string
-        format: int64
+  /contacts:
     get:
       tags:
         - Contacts
@@ -229,7 +192,7 @@ paths:
     post:
       tags:
         - Contacts
-      summary: Create New Contact
+      summary: Create The New Contact
       operationId: createContact
       consumes:
         - application/json
@@ -238,13 +201,35 @@ paths:
       parameters:
         - in: body
           name: contactRequest
-          description: Contact Request
           required: true
           schema:
             $ref: "#/definitions/ContactRequest"
       responses:
         200:
           $ref: '#/responses/OK'
+        401:
+          $ref: '#/responses/NoAuthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/NotFound'
+  /authors/{authorId}/contacts:
+    parameters:
+      - name: authorId
+        in: path
+        description: Author Id
+        required: true
+        type: string
+    get:
+      tags:
+        - Contacts
+      summary: Get All Contact By Author
+      operationId: getAllContactByAuthor
+      produces:
+        - application/json
+      responses:
+        200:
+          $ref: '#/responses/ContactList'
         401:
           $ref: '#/responses/NoAuthorized'
         403:
@@ -353,6 +338,10 @@ definitions:
   BlogRequest:
     type: object
     properties:
+      authorId:
+        type: string
+        example: 030e5438-4d9e-4d41-aa68-ac04b05b7c3f
+
       blogName:
         type: string
         example: Learn CSS
@@ -420,6 +409,10 @@ definitions:
   ContactRequest:
     type: object
     properties:
+
+      authorId:
+        type: string
+        example: 030e5438-4d9e-4d41-aa68-ac04b05b7c3f
 
       contactEmailTo:
         type: string

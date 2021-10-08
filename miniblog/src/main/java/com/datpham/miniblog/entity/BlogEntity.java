@@ -11,6 +11,7 @@ import java.util.Date;
 @Getter
 @Entity
 @Table(name = "BLOG")
+@NoArgsConstructor
 public class BlogEntity {
 
     @Id
@@ -51,4 +52,5 @@ public class BlogEntity {
         this.blogDate = blogDate;
         this.authorId = authorId;
     }
+
 }

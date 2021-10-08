@@ -1,7 +1,9 @@
 package com.datpham.miniblog.mapper;
 
 
+import com.datpham.miniblog.entity.AuthorEntity;
 import com.datpham.miniblog.entity.BlogEntity;
+import com.datpham.miniblog.repository.AuthorRepository;
 import com.datpham.miniblog.repository.BlogRepository;
 import io.tej.SwaggerCodgen.model.Blog;
 import io.tej.SwaggerCodgen.model.BlogList;
@@ -14,22 +16,23 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
 
 @Service
 public class BlogMapper {
 
     private final BlogRepository repository;
+    private final AuthorRepository authorRepository;
 
 
     @Autowired
-    public BlogMapper(BlogRepository repository) {
+    public BlogMapper(BlogRepository repository, AuthorRepository authorRepository) {
         this.repository = repository;
+        this.authorRepository = authorRepository;
     }
 
     public Blog mapBlogFromBlogEntity(BlogEntity from) {
         Blog blog = new Blog();
-
+        blog.setBlogId(from.getBlogId());
         blog.setBlogId(from.getBlogId());
         blog.setBlogContent(from.getBlogContent());
         blog.setBlogDate(convertDateToLocalDate(from.getBlogDate()));
@@ -52,14 +55,17 @@ public class BlogMapper {
         return list;
     }
 
-    public BlogEntity mapBlogEntityFromBlogRequest(String id,BlogRequest request) {
-        BlogEntity entity = repository.getById(id);
 
+    public BlogEntity mapBlogEntityFromBlogRequest(BlogRequest request) {
+        BlogEntity entity = new BlogEntity();
+        AuthorEntity author = authorRepository.getById(request.getAuthorId());
+        entity.setBlogType(request.getBlogType());
+        entity.setBlogId(UUID.randomUUID().toString());
+        entity.setBlogPicture(request.getBlogPicture());
+        entity.setBlogName(request.getBlogName());
         entity.setBlogDate(convertLocalDateToDate(request.getBlogDate()));
         entity.setBlogContent(request.getBlogContent());
-        entity.setBlogName(request.getBlogName());
-        entity.setBlogPicture(request.getBlogPicture());
-        entity.setBlogType(request.getBlogType());
+        entity.setAuthorId(author);
         entity.setBlogIntroduction(request.getBlogIntroduction());
 
         return entity;

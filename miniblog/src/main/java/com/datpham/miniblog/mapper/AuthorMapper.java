@@ -25,10 +25,12 @@ public class AuthorMapper {
 
     public Author mapAuthorFromAuthorEntity(AuthorEntity from) {
         Author author = new Author();
-        author.setAuthorAvatar(from.getAuthorAvatar());
         author.setAuthorId(from.getAuthorId());
-        author.setAuthorName(from.getAuthorName());
+        author.setAuthorAvatar(from.getAuthorAvatar());
+        author.setAuthorEmail(from.getAuthorEmail());
         author.setAuthorDescription(from.getAuthorDescription());
+        author.setAuthorName(from.getAuthorName());
+
         return author;
     }
 

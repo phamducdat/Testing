@@ -9,6 +9,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "CONTACT")
+@AllArgsConstructor
+@NoArgsConstructor
 public class ContactEntity {
 
     @Id
@@ -27,6 +29,8 @@ public class ContactEntity {
 
     @Column(name = "CONTACT_MESSAGE", nullable = false)
     private String contactMessage;
+
+
 
 
     @ManyToOne
